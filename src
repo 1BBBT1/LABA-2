@@ -113,3 +113,20 @@ class Parser:
 		if (self.lexer.sym != Lexer.EOF):
 			self.error("Invalid statement syntax")
 		return node
+		
+		
+								Пример кода для тестирования приложений
+
+#include <catch2/catch.hpp>
+
+TEST_CASE("Test case 1") {
+    int a = 5;
+    int b = 8;
+    REQUIRE(a + b == 13);
+}
+
+TEST_CASE("Test case 2") {
+    int a = 6;
+    int b = 9;
+    REQUIRE(a+b == 15);
+}
