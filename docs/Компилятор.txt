@@ -1,0 +1,82 @@
+В директорию с сайтом добавьте папку с библиотекой А/Б-тестов roistat:
+
+py1.png
+
+В файле roistat/ab_tests.py пропишите настройки тестов.
+
+Пример файла ab_tests.py:
+
+
+ROISTAT_AB_AUTO_SUBMIT = True
+
+#Здесь прописываются настройки тестов
+#Пример заполнения:
+tests = (
+    {
+        'id': 'ab_form_color',
+        'variants': (
+            {'id': 'dark'},
+            {'id': 'blue'},
+        )
+    },
+    {
+        'id': 'ab_main_title',
+        'variants': (
+            {'id': 'small'},
+            {'id': 'big'},
+        )
+    },
+    {
+        'id': 'button_color',
+        'variants': (
+            {'id': 'red'},
+            {'id': 'green'},
+        ),
+        'active': False
+    }
+)
+Как использовать:
+
+Пропишите middleware 'roistat.split_test.ABTest' в файле settings.py вашего сайта на django:
+
+py2.png
+
+Теперь в объекте request имеется атрибут split_tests, который можно передать в шаблон или использовать в коде.
+
+Примеры использования в разных частях системы:
+
+View приложения
+
+
+def index(request):
+        return render(
+            request,
+            'index.html',
+            context={'tests': request.split_tests},
+        )
+Пример использования в шаблоне index.html
+
+
+   <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      {% block title %}<title>Test site</title>{% endblock %}
+    </head>
+    <body>
+      {% block content %}Hello world!{% endblock %}
+      {% if tests.values.ab_form_color == 'blue' %}Blue{% else %}Not blue{% endif %}
+    </body>
+    </html>
+Пример использования в коде
+
+
+    if request.split_tests.values().ab_main_title == 'big':
+        title = 'Big title'
+    else:
+        title = 'Not so big title'
+
+    return render( 
+        request, 
+        'index.html',
+        context={'title': title},
+    )
